@@ -1,0 +1,18 @@
+{
+    "name": "skiy/gnss-analytical",
+    "description": "道路运输车辆卫星定位系统",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "skiy",
+            "email": "dev@skiy.net"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "ChinaGnss\\": "src/"
+        }
+    }
+}

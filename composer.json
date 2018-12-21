@@ -1,6 +1,6 @@
 {
     "name": "skiy/gnss-protocol",
-    "description": "道路运输车辆卫星定位系统中国交通部标准协议解析",
+    "description": "中国交通部GPS车载终端通讯协议解析",
     "type": "library",
     "keywords": ["gnss", "gps"],
     "license": "MIT",

@@ -12,7 +12,11 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "ChinaGnss\\": "src/"
+            "ChinaGnss\\": "src/",
+            "Test\\": "test/"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
     }
 }

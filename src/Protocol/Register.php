@@ -35,7 +35,7 @@ class Register implements Data {
      * 分割
      * @return mixed
      */
-    public function split() {
+    public function split() : void {
         $this->province_id = Format::subByte($this->data, 0, 2); //
         $this->city_id = Format::subByte($this->data, 2, 2);
         $this->manufacturer_id = Format::subByte($this->data, 4, 5);
@@ -49,9 +49,24 @@ class Register implements Data {
      * 解析
      * @return mixed
      */
-    public function analyze() {
+    public function analyze() : array {
         // TODO: Implement analyze() method.
-        var_dump($this);
-        return [];
+
+        $plate_number = '';
+        if (! empty($this->plate_number)) {
+            $plate_number = Format::hex2Str($this->plate_number);
+        }
+
+        $msg = [
+            'province_id' => $this->province_id,
+            'city_id' => $this->city_id,
+            'manufacturer_id' => $this->manufacturer_id,
+            'terminal_model' => $this->terminal_model,
+            'terminal_id' => $this->terminal_id,
+            'plate_color' => $this->plate_color,
+            'plate_number' => $plate_number,
+        ];
+//        var_dump($msg);
+        return $msg;
     }
 }

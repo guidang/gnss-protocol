@@ -19,7 +19,7 @@ class LocatingData implements Data {
      * 分割
      * @return mixed
      */
-    public function split() {
+    public function split() : void {
         // TODO: Implement split() method.
     }
 

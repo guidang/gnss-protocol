@@ -35,10 +35,10 @@ class GpsTest extends TestCase {
 
         $gps = new Gps();
         $gps->analytical($str);
-
         $msg = $gps->getMessage();
         $this->assertIsObject($msg);
 
         return $msg;
     }
+
 }

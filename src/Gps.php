@@ -52,7 +52,6 @@ class Gps {
         $this->receive($data);
 
         $this->message = new Message($this->hex_msg);
-
         if ($this->auto) {
             try {
                 $this->message->analyticalBody();
@@ -68,5 +67,50 @@ class Gps {
      */
     public function getMessage() : Message {
         return $this->message;
+    }
+
+    /**
+     * 获取消息内容
+     * @return array
+     */
+    public function getInfo() : array {
+        $resp = [
+            'head' => $this->message->receive_head,
+            'body' => $this->message->receive_body,
+            'check_code' => $this->message->checkcode,
+            'is_check' => $this->message->receive_check,
+            'msg_id' => $this->message->head_msg_id,
+            'msg_number' => $this->message->head_msg_number,
+        ];
+        return $resp;
+    }
+
+    public function reply(int $code = 4) : string {
+        //通用应答
+        $reply_msg_id = '8001';
+
+        $reply_msg_body_arr = [
+            $this->message->head_msg_number,
+        ];
+
+        //注册应答
+        if ($this->message->head_msg_id == '0100') {
+            $reply_msg_id = '8100';
+
+            if ($code === 0) {
+                $reply_msg_body_arr[] = Format::fillDec2Hex(0, 2); //应答结果
+                $reply_msg_body_arr[] = Format::randomString('hex', 4); //鉴权码
+            } else {
+                $reply_msg_body_arr[] = Format::fillDec2Hex($code, 2); //应答结果
+            }
+        } else { //通用应答
+            $reply_msg_body_arr[] = $this->message->head_msg_id; //消息ID
+            $reply_msg_body_arr[] = Format::fillDec2Hex($code, 2); //应答结果
+        }
+
+        $reply_msg_body = implode('', $reply_msg_body_arr);
+        var_dump($reply_msg_body);
+
+        return '';
     }
 }

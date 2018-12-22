@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace ChinaGnss;
 
 class Router {
-    const ABC = 12344;
     public static $R0100 = 'Register'; //终端注册
     public static $R0102 = 'Authentication'; //鉴权
     public static $R0704 = 'LocatingData'; //定位数据批量上传

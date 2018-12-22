@@ -16,11 +16,11 @@ interface Data {
      * 分割
      * @return mixed
      */
-    public function split();
+    public function split() : void;
 
     /**
      * 解析
      * @return mixed
      */
-    public function analyze();
+    public function analyze() : array;
 }

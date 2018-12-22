@@ -29,6 +29,9 @@ class Message {
 
     public $head_length = 12; //消息头长度,默认为12字节
 
+    public $head_msg_id = ''; //消息ID HEX
+    public $head_msg_number = ''; //消息流水号HEX
+
     public function __construct($data) {
         $this->data = $data;
 
@@ -82,10 +85,12 @@ class Message {
      */
     public function analyticalHead() : array {
         $this->head = $this->splitHead();
-
         $msg_head = new Head($this->head);
         $head = $msg_head->analyze();
 //        var_dump($head);
+//        var_dump($msg_head);
+        $this->head_msg_id = $msg_head->msg_id;
+        $this->head_msg_number = $msg_head->msg_number;
         return $head;
     }
 
@@ -99,7 +104,7 @@ class Message {
         $this->checkcode = Format::subByte($this->data, $length);
 
         //直接在分析校验码处截取消息体
-        $this->body =  Format::subByte($head_body, $this->head_length);
+        $this->body = Format::subByte($head_body, $this->head_length);
 
         $hex_code = Format::generateCode($head_body);
 //        echo "head body: {$head_body} \nverify code: {$code}\nhex code: {$hex_code}\n";
@@ -123,20 +128,21 @@ class Message {
      * 分析消息体
      * @return array
      */
-    public function analyticalBody() : array {
+    public function analyticalBody() {
 //        $this->body = $this->splitBody();
-
         try {
             $ProtocolRid = sprintf('R%s', $this->receive_head['msg_id']);
             $ProtocolFullName = sprintf('ChinaGnss\Protocol\%s', Router::$$ProtocolRid);
 //            var_dump($ProtocolFullName);
             $protocol = new $ProtocolFullName($this->body);
             $result = $protocol->analyze();
+            $this->receive_body = $result;
+//            var_dump($result);
         } catch (\Exception $e) {
+            $this->receive_body = [];
+
             echo sprintf("\nError: %s \mFile: %s \nLine: %s\n", $e->getMessage(), __FILE__, __LINE__);
-            $result = [];
         }
 
-        return $result;
     }
 }

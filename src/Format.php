@@ -207,4 +207,71 @@ class Format {
         $hex_code = self::fillDec2Hex($last_code, 2);
         return $hex_code;
     }
+
+    /**
+     * 十六进制转中文
+     * @param string $hex
+     * @param string $to_encoding 编码(默认GBK)
+     * @return string
+     */
+    public static function hex2Str(string $hex, string $to_encoding = 'gbk') : string {
+        $string = '';
+
+        if (strtolower($to_encoding) == 'gbk') {
+            for ($i = 0; $i < strlen($hex) - 1; $i += 2) {
+                $string .= chr(hexdec($hex[$i] . $hex[$i + 1]));
+            }
+
+            $string = mb_convert_encoding($string, 'UTF-8', 'GBK');
+
+        } else {
+
+        }
+
+        return $string;
+    }
+
+    /**
+     * 创建随机字符串
+     * @param string $type 生成字符串类型
+     * @param int $len 长度
+     * @return string
+     */
+    public static function randomString(string $type = 'alnum', int $len = 8) : string {
+        switch ($type) {
+            case 'basic':
+                return (string)mt_rand();
+            case 'alnum':
+            case 'numeric':
+            case 'nozero':
+            case 'alpha':
+            case 'hex':
+                switch ($type) {
+                    case 'alpha':
+                        $pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                        break;
+                    case 'alnum':
+                        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                        break;
+                    case 'numeric':
+                        $pool = '0123456789';
+                        break;
+                    case 'nozero':
+                        $pool = '123456789';
+                        break;
+                    case 'hex':
+                        $pool = '0123456789abcdefABCDEF';
+                        break;
+                }
+
+                $times = (int)ceil($len / strlen($pool));
+                return substr(str_shuffle(str_repeat($pool, $times)), 0, $len);
+            case 'unique': // todo: remove in 3.1+
+            case 'md5':
+                return md5(uniqid(mt_rand()));
+            case 'encrypt': // todo: remove in 3.1+
+            case 'sha1':
+                return sha1(uniqid(mt_rand(), true));
+        }
+    }
 }

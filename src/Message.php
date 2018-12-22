@@ -126,15 +126,14 @@ class Message {
     public function analyticalBody() : array {
 //        $this->body = $this->splitBody();
 
-        $config = include_once 'config.php';
         try {
-            $ProtocolName = $config['router'][$this->receive_head['msg_id']];
-            $ProtocolFullName = sprintf('ChinaGnss\Protocol\%s', $ProtocolName);
+            $ProtocolRid = sprintf('R%s', $this->receive_head['msg_id']);
+            $ProtocolFullName = sprintf('ChinaGnss\Protocol\%s', Router::$$ProtocolRid);
 //            var_dump($ProtocolFullName);
             $protocol = new $ProtocolFullName($this->body);
             $result = $protocol->analyze();
         } catch (\Exception $e) {
-            echo sprintf("处理消息体失败: %s, File: %s, Line: %s\n", $e->getMessage(), __FILE__, __LINE__);
+            echo sprintf("\nError: %s \mFile: %s \nLine: %s\n", $e->getMessage(), __FILE__, __LINE__);
             $result = [];
         }
 

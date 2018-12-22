@@ -1,30 +1,34 @@
 {
-    "name": "skiy/gnss-protocol",
-    "description": "中国交通部GPS车载终端通讯协议解析",
-    "type": "library",
-    "keywords": ["gnss", "gps"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "skiy",
-            "email": "dev@skiy.net"
-        }
-    ],
-    "require": {
-        "php": ">=7.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "ChinaGnss\\": "src/",
-            "Test\\": "test/"
-        }
-    },
-    "autoload-dev": {
-        "classmap": [
-            "tests/"
-        ]
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7"
+  "name": "skiy/gnss-protocol",
+  "description": "中国交通部GPS车载终端通讯协议解析",
+  "type": "library",
+  "keywords": [
+    "gnss",
+    "gps"
+  ],
+  "homepage": "https://github.com/skiy/gnss-protocol",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "skiy",
+      "email": "dev@skiy.net"
     }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ChinaGnss\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": [
+      "parallel-lint . --exclude vendor",
+      "phpunit"
+    ]
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.5"
+  }
 }

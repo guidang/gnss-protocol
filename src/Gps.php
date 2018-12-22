@@ -57,7 +57,7 @@ class Gps {
             try {
                 $this->message->analyticalBody();
             } catch (\Exception $e) {
-                echo sprintf("处理消息体失败: %s, File: %s, Line: %s\n", $e->getMessage(), __FILE__, __LINE__);
+                echo sprintf("\nError: %s \nFile: %s \nLine: %s\n\n", $e->getMessage(), __FILE__, __LINE__);
             }
         }
     }

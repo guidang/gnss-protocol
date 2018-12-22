@@ -14,7 +14,7 @@ namespace ChinaGnss\Structure;
 use ChinaGnss\Format;
 
 class Property implements Data {
-    public $data; //源内容
+    public $data = ''; //源内容
     public $data_bin; //源内容的二进制
 
     public $body_len; //消息长度
@@ -24,7 +24,11 @@ class Property implements Data {
 
 //    public $response; //数据
 
-    public function __construct($data) {
+    /**
+     * Property constructor.
+     * @param string $data
+     */
+    public function __construct(string $data) {
         $this->data = $data;
         $this->data_bin = Format::fillHex2Bin($data);
 

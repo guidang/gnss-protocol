@@ -12,6 +12,14 @@ declare(strict_types=1);
 namespace  ChinaGnss\Structure;
 
 interface Data {
+
+    /**
+     * 初始化
+     * Data constructor.
+     * @param string $data
+     */
+    public function __construct(string $data);
+
     /**
      * 分割
      * @return mixed

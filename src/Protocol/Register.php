@@ -15,7 +15,7 @@ use ChinaGnss\Format;
 use ChinaGnss\Structure\Data;
 
 class Register implements Data {
-    public $data; //源内容
+    public $data = ''; //源内容
 
     public $province_id; //省域ID， GB/T 2260 前二
     public $city_id; //城市ID，GB/T 2260 后四

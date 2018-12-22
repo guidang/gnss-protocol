@@ -15,7 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 class BodyTest extends TestCase {
 
-    public function testRegisterBody() {
+    /**
+     * 注册
+     */
+    public function testRegister() {
         $str = '7e0100002d058032343758009300000000594300000059432d31310000000000000000000000000000000005803234375802d4c1423838383838ff7e';
 
         $gps = new Gps();
@@ -25,7 +28,80 @@ class BodyTest extends TestCase {
 
 //        $msg = $gps->getMessage();
 //        var_dump($msg);
-        var_dump($gps->getInfo());
+        $info = $gps->getInfo();
+//        var_dump($info);
+
+        $this->assertIsObject($gps);
+    }
+
+    /**
+     * 心跳
+     */
+    public function testHeartbeat() {
+        $str = '7e000200000580323437580079977e';
+
+        $gps = new Gps();
+        //心跳无Body
+        $gps->setAuto(false);
+
+        $gps->analytical($str);
+
+        $msg = $gps->getMessage();
+//        var_dump($msg);
+
+        $this->assertIsObject($gps);
+    }
+
+    /**
+     * 鉴权
+     */
+    public function testAuthentication() {
+        $str = '7e0102000205803234375800007b7d02e87e';
+
+        $gps = new Gps();
+
+        $gps->analytical($str);
+
+//        $msg = $gps->getMessage();
+//        var_dump($msg);
+        $info = $gps->getInfo();
+//        var_dump($info);
+
+        $this->assertIsObject($gps);
+    }
+
+    /**
+     * 位置信息汇报
+     */
+    public function testLocationReporting() {
+        $str = '0200002e05803234375832b900000000000c000301581e5206ca60b6004c0000008f18122303545925040000000001040000037530011f310105e6';
+
+        $gps = new Gps();
+
+        $gps->analytical($str);
+
+//        $msg = $gps->getMessage();
+//        var_dump($msg);
+        $info = $gps->getInfo();
+        var_dump($info);
+
+        $this->assertIsObject($gps);
+    }
+
+    /**
+     * 定位数据批量上传
+     */
+    public function testLocatingData() {
+        $str = '070400330580323437583389000101002e00000000000c000301581db206ca5fbb004b002d016418122304323925040000000001040000037930011f310109f5';
+
+        $gps = new Gps();
+
+        $gps->analytical($str);
+
+//        $msg = $gps->getMessage();
+//        var_dump($msg);
+        $info = $gps->getInfo();
+//        var_dump($info);
 
         $this->assertIsObject($gps);
     }

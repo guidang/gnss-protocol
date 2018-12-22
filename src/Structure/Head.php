@@ -14,7 +14,7 @@ namespace ChinaGnss\Structure;
 use ChinaGnss\Format;
 
 class Head implements Data {
-    public $data; //源内容
+    public $data = ''; //源内容
 
     public $msg_id; //消息ID
     public $body_prop; //消息体属性
@@ -22,7 +22,11 @@ class Head implements Data {
     public $msg_number; //消息流水号
     public $msg_items; //包封装项
 
-    public function __construct($data) {
+    /**
+     * Head constructor.
+     * @param string $data
+     */
+    public function __construct(string $data) {
         $this->data = $data;
 
         $this->split();

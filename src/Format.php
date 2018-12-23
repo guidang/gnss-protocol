@@ -101,6 +101,15 @@ class Format {
     }
 
     /**
+     * 十六进制转十进制
+     * @param string $str
+     * @return string
+     */
+    public static function hex2Dec(string $str) : string {
+        return base_convert($str, 16, 10);
+    }
+
+    /**
      * 向左侧填充字符串
      * @param string $str 原字符串
      * @param int $len 填充长度

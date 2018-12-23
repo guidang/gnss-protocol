@@ -59,12 +59,6 @@ class LocationReporting implements Data {
         $this->ext_msg_id = Format::subByte($this->data, 28, 1);
         $this->ext_msg_length = Format::subByte($this->data, 29, 1);
         $this->ext_msg_data = Format::subByte($this->data, 30);
-
-        for ($i = 31; $i >= 0; $i--) {
-            $key = 31 - $i;
-            $value = $this->ext_msg_data[$i];
-//            echo ("\ni: {$i}, key: {$key}, value: {$value}");
-        }
     }
 
     /**
@@ -73,12 +67,20 @@ class LocationReporting implements Data {
      */
     public function analyze(): array {
         // TODO: Implement analyze() method.
+
         $msg = [
-            'longitude' => $this->longitude, //113926326 06ca60b6
-            'elevation' => base_convert($this->elevation, 16, 10),
-            'speed' => base_convert($this->speed, 16, 10),
-            'direction' => base_convert($this->direction, 16, 10),
+            'latitude' => Format::hex2Dec($this->latitude) / 1e6,
+            'longitude' => Format::hex2Dec($this->longitude) / 1e6,
+            'elevation' => Format::hex2Dec($this->elevation),
+            'speed' => Format::hex2Dec($this->speed),
+            'direction' => Format::hex2Dec($this->direction),
         ];
+
+        for ($i = 31; $i >= 0; $i--) {
+            $key = 31 - $i;
+            $value = $this->ext_msg_data[$i];
+            echo ("\nbit: {$key}, value: {$value}, index: {$i}");
+        }
 
 //        var_dump($this);
         return $msg;

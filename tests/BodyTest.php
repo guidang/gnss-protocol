@@ -83,7 +83,7 @@ class BodyTest extends TestCase {
 //        $msg = $gps->getMessage();
 //        var_dump($msg);
         $info = $gps->getInfo();
-        var_dump($info);
+//        var_dump($info);
 
         $this->assertIsObject($gps);
     }

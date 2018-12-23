@@ -56,10 +56,10 @@ class LocatingData implements Data {
         $location = $reporting->analyze();
 
         $msg = [
-            'count' => base_convert($this->count, 16, 10),
-            'type' => base_convert($this->type, 16, 10),
+            'count' => Format::hex2Dec($this->count),
+            'type' => Format::hex2Dec($this->type),
             'items' => [
-                'length' => base_convert($msg_len, 16, 10),
+                'length' => Format::hex2Dec($msg_len),
                 'location' => $location,
             ]
         ];

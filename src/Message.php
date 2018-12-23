@@ -31,6 +31,7 @@ class Message {
 
     public $head_msg_id = ''; //消息ID HEX
     public $head_msg_number = ''; //消息流水号HEX
+    public $head_msg_mobile = ''; //设备手机号
 
     public function __construct($data) {
         $this->data = $data;
@@ -91,6 +92,7 @@ class Message {
 //        var_dump($msg_head);
         $this->head_msg_id = $msg_head->msg_id;
         $this->head_msg_number = $msg_head->msg_number;
+        $this->head_msg_mobile = $msg_head->device_mobile;
         return $head;
     }
 

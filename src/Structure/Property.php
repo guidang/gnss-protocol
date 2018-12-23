@@ -60,7 +60,7 @@ class Property implements Data {
         }
 
         $msg = [
-            'body_len' => base_convert($this->body_len, 2, 10), //消息体长度(十进制)
+            'body_len' => Format::bin2Dec($this->body_len), //消息体长度(十进制)
             'encrypt_type' => $encrypt_type,
             'subcontracting' => ($this->subcontracting == 1) ? true : false, //是否为长消息
             'keep' => $this->keep,

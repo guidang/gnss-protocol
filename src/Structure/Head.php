@@ -50,15 +50,15 @@ class Head implements Data {
     public function analyze() : array {
         $msg_items = [];
         if (mb_strlen($this->msg_items) > 0) {
-            $msg_items['count'] = base_convert(Format::subByte($this->msg_items, 0, 2), 16, 10); //包总数
-            $msg_items['num'] = base_convert(Format::subByte($this->msg_items, 2, 2), 16, 10); //包序号
+            $msg_items['count'] = Format::hex2Dec(Format::subByte($this->msg_items, 0, 2)); //包总数
+            $msg_items['num'] = Format::hex2Dec(Format::subByte($this->msg_items, 2, 2)); //包序号
         }
 
         $msg = [
             'msg_id' => $this->msg_id,
             'body_prop' => [], //消息体属性
             'device_mobile' => $this->device_mobile,
-            'msg_number' => base_convert($this->msg_number, 16, 10), //流水号
+            'msg_number' => Format::hex2Dec($this->msg_number), //流水号
             'msg_items' => $msg_items,
         ];
 

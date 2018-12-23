@@ -14,6 +14,27 @@ namespace ChinaGnss;
 class Format {
 
     /**
+     * 解析十六进制包
+     * @param string $str
+     * @return mixed
+     */
+    public static function unpackData(string $str) : string {
+        $arr = unpack("H*", $str);
+        $data = $arr[1];
+        return $data;
+    }
+
+    /**
+     * 封装成十六进制包
+     * @param string $str
+     * @return mixed
+     */
+    public static function packData(string $str) : string {
+        $data = pack("H*", $str);
+        return $data;
+    }
+
+    /**
      * 消息转义
      * @param $str
      * @return mixed
@@ -70,6 +91,17 @@ class Format {
     }
 
     /**
+     * 二进制转十六进制并且填充
+     * @param string $str
+     * @return string
+     */
+    public static function fillBin2Hex(string $str) : string {
+        $fill_len = (mb_strlen($str) / 8) * 2; //字节长度 * 2 = 字符串长度
+        $str_hex = self::bin2Hex($str);
+        return self::fillLeft($str_hex, $fill_len);
+    }
+
+    /**
      * 十六进制转二进制并且填充
      * @param string $str
      * @return string
@@ -107,6 +139,33 @@ class Format {
      */
     public static function hex2Dec(string $str) : string {
         return base_convert($str, 16, 10);
+    }
+
+    /**
+     * 二进制转十进制
+     * @param string $str
+     * @return string
+     */
+    public static function bin2Dec(string $str) : string {
+        return base_convert($str, 2, 10);
+    }
+
+    /**
+     * 二进制转十六进制
+     * @param string $str
+     * @return string
+     */
+    public static function bin2Hex(string $str) : string {
+        return base_convert($str, 2, 16);
+    }
+
+    /**
+     * 十进制转二进制
+     * @param int $number
+     * @return string
+     */
+    public static function dec2Bin(int $number) : string {
+        return base_convert($number, 10, 2);
     }
 
     /**

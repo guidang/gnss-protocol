@@ -79,7 +79,7 @@ class LocationReporting implements Data {
         for ($i = 31; $i >= 0; $i--) {
             $key = 31 - $i;
             $value = $this->ext_msg_data[$i];
-            echo ("\nbit: {$key}, value: {$value}, index: {$i}");
+//            echo ("\nbit: {$key}, value: {$value}, index: {$i}");
         }
 
 //        var_dump($this);

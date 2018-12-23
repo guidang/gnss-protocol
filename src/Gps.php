@@ -17,8 +17,9 @@ class Gps {
     public $hex_msg = ''; //接收数据 - 不包含包头包尾
     public $hex_reply = ''; //回复数据 - 不包含包头包尾
 
-    protected $message;
+    protected $message; //消息类
     protected $auto = true; //是否分析消息体
+    protected $reply; //应答类
 
     public function __construct() {
     }
@@ -81,36 +82,43 @@ class Gps {
             'is_check' => $this->message->receive_check,
             'msg_id' => $this->message->head_msg_id,
             'msg_number' => $this->message->head_msg_number,
+//            'msg_mobile' => $this->message->
         ];
         return $resp;
     }
 
-    public function reply(int $code = 4) : string {
-        //通用应答
-        $reply_msg_id = '8001';
+    /**
+     * 应答消息内容
+     * @param int $code 结果
+     * @param int $number 应答流水号
+     * @param int $type 应答类型 (0.应答消息(十六进制字符串), 1.应答消息体, 其它.应答消息(已封装的十六进制数据流))
+     * @param array $options 扩展选项 [is_pack,encrypt_type,keep] 是否分包,加密方式,保留位
+     * @return string
+     */
+    public function reply(int $code = 4, int $number = 0, int $type = 0, array $options = []) : string {
+        $this->reply = new Reply($this->message->head_msg_id, $this->message->head_msg_number, $this->message->head_msg_mobile);
 
-        $reply_msg_body_arr = [
-            $this->message->head_msg_number,
-        ];
-
-        //注册应答
-        if ($this->message->head_msg_id == '0100') {
-            $reply_msg_id = '8100';
-
-            if ($code === 0) {
-                $reply_msg_body_arr[] = Format::fillDec2Hex(0, 2); //应答结果
-                $reply_msg_body_arr[] = Format::randomString('hex', 4); //鉴权码
-            } else {
-                $reply_msg_body_arr[] = Format::fillDec2Hex($code, 2); //应答结果
-            }
-        } else { //通用应答
-            $reply_msg_body_arr[] = $this->message->head_msg_id; //消息ID
-            $reply_msg_body_arr[] = Format::fillDec2Hex($code, 2); //应答结果
+        if ($number > 0) {
+            $this->reply->setNumber($number);
         }
 
-        $reply_msg_body = implode('', $reply_msg_body_arr);
-        var_dump($reply_msg_body);
+        if (! empty($options)) {
+            $is_pack = isset($options['is_pack']) ? (bool)$options['is_pack'] : false;
+            $encrypt_type = (! empty($options['encrypt_type']) && (mb_strlen($options['encrypt_type']) == 3)) ? $options['encrypt_type'] : '000';
+            $keep = (! empty($options['keep']) && (mb_strlen($options['keep']) == 2)) ? $options['keep'] : '00';
 
-        return '';
+            $this->reply->setParams($is_pack, $encrypt_type, $keep);
+        }
+
+        $reply = $this->reply->reply($code, $type);
+        return $reply;
+    }
+
+    /**
+     * 获取应答对象
+     * @return Reply
+     */
+    public function getReply() : Reply {
+        return $this->reply;
     }
 }

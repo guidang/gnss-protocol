@@ -76,13 +76,13 @@ class Gps {
      */
     public function getInfo() : array {
         $resp = [
-            'head' => $this->message->receive_head,
-            'body' => $this->message->receive_body,
-            'check_code' => $this->message->checkcode,
-            'is_check' => $this->message->receive_check,
-            'msg_id' => $this->message->head_msg_id,
-            'msg_number' => $this->message->head_msg_number,
-//            'msg_mobile' => $this->message->
+            'head' => $this->message->receive_head, //消息头
+            'body' => $this->message->receive_body, //消息体
+            'check_code' => $this->message->checkcode, //校验码
+            'is_check' => $this->message->receive_check, //校验是否通过
+            'msg_id' => $this->message->head_msg_id, //消息ID
+            'msg_number' => $this->message->head_msg_number, //消息流水号
+            'msg_mobile' => $this->message->head_msg_mobile, //手机号
         ];
         return $resp;
     }

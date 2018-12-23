@@ -23,8 +23,22 @@ $gps->setAuto(false);
 //拆分、分析消息
 $gps->analytical($str);
 
+//获取消息类
 $msg = $gps->getMessage();
 var_dump($msg);
+
+//获取消息体内容
+$info = $gps->getInfo();
+var_dump($info);
+
+//获取应答消息类
+$reply = $gps->getReply();
+var_dump($reply);
+
+//获取应答消息
+$reply_info = $gps->reply(4, 100, 0);
+var_dump($reply_info);
+
 ```
 
 ## TODO

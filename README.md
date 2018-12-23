@@ -31,13 +31,13 @@ var_dump($msg);
 $info = $gps->getInfo();
 var_dump($info);
 
-//获取应答消息类
-$reply = $gps->getReply();
-var_dump($reply);
-
 //获取应答消息
 $reply_info = $gps->reply(4, 100, 0);
 var_dump($reply_info);
+
+//获取应答消息类
+$reply = $gps->getReply();
+var_dump($reply);
 
 ```
 

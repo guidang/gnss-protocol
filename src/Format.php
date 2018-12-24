@@ -206,6 +206,7 @@ class Format {
     }
 
     /**
+     * 字符串切割成数组并使所有字符串长度一致
      * @param  string $str 字符串
      * @param int $filter_len 按长度切割,
      * @param string $fill_str 前面补位字符
@@ -341,5 +342,17 @@ class Format {
             case 'sha1':
                 return sha1(uniqid(mt_rand(), true));
         }
+    }
+
+    /**
+     * 反转字符串再切割字符串成数组(按1字符)
+     * @param $str
+     * @return array
+     */
+    public static function strRevArr($str) : array {
+        //反转字符串
+        $reverse_str = strrev($str);
+        $arr = str_split($reverse_str, 1);
+        return $arr;
     }
 }

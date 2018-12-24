@@ -68,21 +68,156 @@ class LocationReporting implements Data {
     public function analyze(): array {
         // TODO: Implement analyze() method.
 
+        $alarm_signs = $this->analyzeAlarm(); //报警
+        $status = $this->analyzeStatus(); //状态
+        $extend = $this->analyzeExtend(); //扩展
+
         $msg = [
+            'alarm_signs' => $alarm_signs,
+            'status' => $status,
             'latitude' => Format::hex2Dec($this->latitude) / 1e6,
             'longitude' => Format::hex2Dec($this->longitude) / 1e6,
             'elevation' => Format::hex2Dec($this->elevation),
             'speed' => Format::hex2Dec($this->speed),
             'direction' => Format::hex2Dec($this->direction),
+            'time' => $this->time,
+            'extend' => $extend,
         ];
 
-        for ($i = 31; $i >= 0; $i--) {
-            $key = 31 - $i;
-            $value = $this->ext_msg_data[$i];
-//            echo ("\nbit: {$key}, value: {$value}, index: {$i}");
+//        var_dump($this);
+        return $msg;
+    }
+
+    /**
+     * 解析报警数据
+     * @return array
+     */
+    public function analyzeAlarm() : array {
+        $signs_bin = Format::fillHex2Bin($this->alarm_signs);
+//        $signs_bin = '1234567890abcdefghijklnmopqrstuvw';
+        $signs_arr = Format::strRevArr($signs_bin);
+
+        $msg = [
+            'emergency_alarm' => $signs_arr[0],
+            'overspeed_alarm' => $signs_arr[1],
+            'fatigue_driving' => $signs_arr[2],
+            'danger_warning' => $signs_arr[3],
+            'gnss_module_failure' => $signs_arr[4],
+            'gnss_antenna_failure' => $signs_arr[5],
+            'gnss_antenna_shortcircuit' => $signs_arr[6],
+            'power_undervoltage' => $signs_arr[7],
+            'power_failure' => $signs_arr[8],
+            'display_failure' => $signs_arr[9],
+            'tts_failure' => $signs_arr[10],
+            'camera_failure' => $signs_arr[11],
+            'iccard_failure' => $signs_arr[12],
+            'overspeed_warning' => $signs_arr[13],
+            'fatigue_driving_warning' => $signs_arr[14],
+//            'keep1' => $signs_arr[15],
+//            'keep2' => $signs_arr[16],
+//            'keep3' => $signs_arr[17],
+            'driving_timeout' => $signs_arr[18],
+            'overtime_parking' => $signs_arr[19],
+            'access_area' => $signs_arr[20],
+            'access_routes' => $signs_arr[21],
+            'road_travel_timeerr' => $signs_arr[22],
+            'route_deviation_alarm' => $signs_arr[23],
+            'vss_failure' => $signs_arr[24],
+            'abnormal_oil' => $signs_arr[25],
+            'vehicle_theft' => $signs_arr[26],
+            'unauthorized_start' => $signs_arr[27],
+            'unauthorized_movement' => $signs_arr[28],
+            'collision_warning' => $signs_arr[29],
+            'rollover_warning' => $signs_arr[30],
+            'unauthorized_opendoor_alarm' => $signs_arr[31],
+        ];
+
+        return $msg;
+    }
+
+    /**
+     * 解析状态
+     * @return array
+     */
+    public function analyzeStatus() : array {
+        $status_bin = Format::fillHex2Bin($this->status);
+        $status_arr = Format::strRevArr($status_bin);
+
+        //装载状态 0:空车;1:半载;2:保留;3:满载
+        $loading = Format::bin2Dec($status_arr[8].$status_arr[9]);
+
+        $msg = [
+            'acc' => $status_arr[0],
+            'located' => $status_arr[1],
+            'latitude' => $status_arr[2],
+            'longitude' => $status_arr[3],
+            'operation' => $status_arr[4],
+            'encrypted' => $status_arr[5],
+//            'keep1' => $status_arr[6],
+//            'keep2' => $status_arr[7],
+            'loading' => $loading,
+            'oil_disconnected' => $status_arr[10],
+            'circuit_disconnected' => $status_arr[11],
+            'door_locked' => $status_arr[12],
+            'front_door_opened' => $status_arr[13],
+            'middle_door_opened' => $status_arr[14],
+            'back_door_opened' => $status_arr[15],
+            'driver_door_opened' => $status_arr[16],
+            'other_door_opened' => $status_arr[17],
+            'gps' => $status_arr[18],
+            'beidou' => $status_arr[19],
+            'glonass' => $status_arr[20],
+            'galileo' => $status_arr[21],
+//            'keep3' => $status_arr[22],
+//            'keep4' => $status_arr[23],
+//            'keep5' => $status_arr[24],
+//            'keep6' => $status_arr[25],
+//            'keep7' => $status_arr[26],
+//            'keep8' => $status_arr[27],
+//            'keep9' => $status_arr[28],
+//            'keep10' => $status_arr[29],
+//            'keep11' => $status_arr[30],
+//            'keep12' => $status_arr[31],
+        ];
+
+        return $msg;
+    }
+
+    /**
+     * 解析扩展数据
+     * @return array
+     */
+    public function analyzeExtend() : array {
+        $msg = [
+            'id' => Format::hex2Dec($this->ext_msg_id),
+            'length' => Format::hex2Dec($this->ext_msg_length),
+            'info' => $this->analyzeExtInfo(),
+        ];
+
+        return $msg;
+    }
+
+    /**
+     * 扩展信息解析
+     * @return array
+     */
+    protected function analyzeExtInfo() : array {
+        $msg = [];
+
+        switch (strtolower($this->ext_msg_id)) {
+            //扩展车辆信号状态位
+            case '25':
+                for ($i = 31; $i >= 0; $i--) {
+                    $key = 31 - $i;
+                    $value = $this->ext_msg_data[$i];
+                    echo ("\nbit: {$key}, value: {$value}, index: {$i}");
+                }
+                break;
+
+            case '2a':
+                break;
         }
 
-//        var_dump($this);
         return $msg;
     }
 }

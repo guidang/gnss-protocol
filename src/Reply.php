@@ -20,6 +20,8 @@ class Reply {
     public $msg_number = ''; //消息流水号
     public $msg_mobile = ''; //设备手机号
     public $reply_id = ''; //应答ID
+    public $auth_code = ''; //鉴权码
+
     protected $reply_number = 0; //应答流水号
 
     public $reply_body = ''; //应答消息体
@@ -98,7 +100,8 @@ class Reply {
 
         if ($this->code === 0) {
             $reply_msg_body_arr[] = Format::fillDec2Hex(0, 2); //应答结果
-            $reply_msg_body_arr[] = Format::randomString('hex', 4); //鉴权码
+            $this->auth_code = Format::randomString('hex', 4);
+            $reply_msg_body_arr[] = $this->auth_code; //鉴权码
         } else {
             $reply_msg_body_arr[] = Format::fillDec2Hex($this->code, 2); //应答结果
         }

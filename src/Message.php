@@ -128,13 +128,19 @@ class Message {
 
     /**
      * 分析消息体
-     * @return array
      */
-    public function analyticalBody() {
+    public function analyticalBody() : void {
 //        $this->body = $this->splitBody();
         try {
             $ProtocolRid = sprintf('R%s', $this->receive_head['msg_id']);
+            if (! isset(Router::$$ProtocolRid)) {
+                throw new \Exception("Access to undeclared static property: ChinaGnss\Router::{$ProtocolRid}");
+            }
+
             $ProtocolFullName = sprintf('ChinaGnss\Protocol\%s', Router::$$ProtocolRid);
+            if (! class_exists($ProtocolFullName)) {
+                throw new \Exception("Error: Class '{$ProtocolFullName}' not found");
+            }
 //            var_dump($ProtocolFullName);
             $protocol = new $ProtocolFullName($this->body);
             $result = $protocol->analyze();
@@ -143,7 +149,7 @@ class Message {
         } catch (\Exception $e) {
             $this->receive_body = [];
 
-            echo sprintf("\nError: %s \mFile: %s \nLine: %s\n", $e->getMessage(), __FILE__, __LINE__);
+            echo sprintf("\nError: %s \nFile: %s \nLine: %s\n", $e->getMessage(), __FILE__, __LINE__);
         }
 
     }

@@ -25,7 +25,11 @@ class Register implements Data {
     public $plate_color; //车牌颜色
     public $plate_number; //车辆标识(车牌号)
 
-    public function __construct($data) {
+    /**
+     * Register constructor.
+     * @param string $data
+     */
+    public function __construct(string $data) {
         $this->data = $data;
 
         $this->split();
@@ -36,7 +40,7 @@ class Register implements Data {
      * @return mixed
      */
     public function split() : void {
-        $this->province_id = Format::subByte($this->data, 0, 2); //
+        $this->province_id = Format::subByte($this->data, 0, 2);
         $this->city_id = Format::subByte($this->data, 2, 2);
         $this->manufacturer_id = Format::subByte($this->data, 4, 5);
         $this->terminal_model = Format::subByte($this->data, 9, 20);

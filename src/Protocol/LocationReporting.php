@@ -94,9 +94,48 @@ class LocationReporting implements Data {
      */
     public function analyzeAlarm() : array {
         $signs_bin = Format::fillHex2Bin($this->alarm_signs);
-//        $signs_bin = '1234567890abcdefghijklnmopqrstuvw';
+//        $signs_bin = '234567890abcdefghijklnmopqrstuvw';
         $signs_arr = Format::strRevArr($signs_bin);
 
+        /*
+        $gov_key = [
+            'emergency_alarm',
+            'overspeed_alarm',
+            'fatigue_driving',
+            'danger_warning',
+            'gnss_module_failure',
+            'gnss_antenna_failure',
+            'gnss_antenna_shortcircuit',
+            'power_undervoltage',
+            'power_failure',
+            'display_failure',
+            'tts_failure',
+            'camera_failure',
+            'iccard_failure',
+            'overspeed_warning',
+            'fatigue_driving_warning',
+            'keep15',
+            'keep16',
+            'keep17',
+            'driving_timeout',
+            'overtime_parking',
+            'access_area',
+            'access_routes',
+            'road_travel_timeerr',
+            'route_deviation_alarm',
+            'vss_failure',
+            'abnormal_oil',
+            'vehicle_theft',
+            'unauthorized_start',
+            'unauthorized_movement',
+            'collision_warning',
+            'rollover_warning',
+            'unauthorized_opendoor_alarm',
+        ];
+        */
+
+        /*
+        //默认直接赋值方式
         $msg = [
             'emergency_alarm' => $signs_arr[0],
             'overspeed_alarm' => $signs_arr[1],
@@ -113,9 +152,9 @@ class LocationReporting implements Data {
             'iccard_failure' => $signs_arr[12],
             'overspeed_warning' => $signs_arr[13],
             'fatigue_driving_warning' => $signs_arr[14],
-//            'keep1' => $signs_arr[15],
-//            'keep2' => $signs_arr[16],
-//            'keep3' => $signs_arr[17],
+            'keep15' => $signs_arr[15],
+            'keep16' => $signs_arr[16],
+            'keep17' => $signs_arr[17],
             'driving_timeout' => $signs_arr[18],
             'overtime_parking' => $signs_arr[19],
             'access_area' => $signs_arr[20],
@@ -131,6 +170,10 @@ class LocationReporting implements Data {
             'rollover_warning' => $signs_arr[30],
             'unauthorized_opendoor_alarm' => $signs_arr[31],
         ];
+        */
+
+//        $msg = array_combine($gov_key, $signs_arr);
+        $msg = $signs_arr;
 
         return $msg;
     }
@@ -144,41 +187,46 @@ class LocationReporting implements Data {
         $status_arr = Format::strRevArr($status_bin);
 
         //装载状态 0:空车;1:半载;2:保留;3:满载
-        $loading = Format::bin2Dec($status_arr[8].$status_arr[9]);
+//        $loading = Format::bin2Dec($status_arr[8].$status_arr[9]);
 
-        $msg = [
-            'acc' => $status_arr[0],
-            'located' => $status_arr[1],
-            'latitude' => $status_arr[2],
-            'longitude' => $status_arr[3],
-            'operation' => $status_arr[4],
-            'encrypted' => $status_arr[5],
-//            'keep1' => $status_arr[6],
-//            'keep2' => $status_arr[7],
-            'loading' => $loading,
-            'oil_disconnected' => $status_arr[10],
-            'circuit_disconnected' => $status_arr[11],
-            'door_locked' => $status_arr[12],
-            'front_door_opened' => $status_arr[13],
-            'middle_door_opened' => $status_arr[14],
-            'back_door_opened' => $status_arr[15],
-            'driver_door_opened' => $status_arr[16],
-            'other_door_opened' => $status_arr[17],
-            'gps' => $status_arr[18],
-            'beidou' => $status_arr[19],
-            'glonass' => $status_arr[20],
-            'galileo' => $status_arr[21],
-//            'keep3' => $status_arr[22],
-//            'keep4' => $status_arr[23],
-//            'keep5' => $status_arr[24],
-//            'keep6' => $status_arr[25],
-//            'keep7' => $status_arr[26],
-//            'keep8' => $status_arr[27],
-//            'keep9' => $status_arr[28],
-//            'keep10' => $status_arr[29],
-//            'keep11' => $status_arr[30],
-//            'keep12' => $status_arr[31],
+        /*
+        $gov_key = [
+            'acc',
+            'located',
+            'latitude',
+            'longitude',
+            'operation',
+            'encrypted',
+            'keep6',
+            'keep7',
+            'loading1',
+            'loading2',
+            'oil_disconnected',
+            'circuit_disconnected',
+            'door_locked',
+            'front_door_opened',
+            'middle_door_opened',
+            'back_door_opened',
+            'driver_door_opened',
+            'other_door_opened',
+            'gps',
+            'beidou',
+            'glonass',
+            'galileo',
+            'keep22',
+            'keep23',
+            'keep24',
+            'keep25',
+            'keep26',
+            'keep27',
+            'keep28',
+            'keep29',
+            'keep30',
+            'keep31',
         ];
+        */
+//        $msg = array_combine($gov_key, $status_arr);
+        $msg = $status_arr;
 
         return $msg;
     }
@@ -189,8 +237,8 @@ class LocationReporting implements Data {
      */
     public function analyzeExtend() : array {
         $msg = [
-            'id' => Format::hex2Dec($this->ext_msg_id),
-            'length' => Format::hex2Dec($this->ext_msg_length),
+            'id' => $this->ext_msg_id, //Format::hex2Dec($this->ext_msg_id), //附加信息ID(十进制)
+            'length' => Format::hex2Dec($this->ext_msg_length), //附加信息长度(十进制)
             'info' => $this->analyzeExtInfo(),
         ];
 
@@ -204,6 +252,7 @@ class LocationReporting implements Data {
     protected function analyzeExtInfo() : array {
         $msg = [];
 
+        /*
         switch (strtolower($this->ext_msg_id)) {
             //扩展车辆信号状态位
             case '25':
@@ -217,6 +266,7 @@ class LocationReporting implements Data {
             case '2a':
                 break;
         }
+        */
 
         return $msg;
     }

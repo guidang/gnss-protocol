@@ -25,7 +25,9 @@ class ReplyTest extends TestCase {
         $gps->analytical($str);
 
         $code = 0;
-        $gps->reply($code);
+        $reply = $gps->reply($code);
+//        var_dump($reply);
+        var_dump($gps);
 
         $this->assertIsObject($gps);
     }
@@ -40,7 +42,8 @@ class ReplyTest extends TestCase {
         $gps->analytical($str);
 
         $code = 4;
-        $gps->reply($code);
+        $reply = $gps->reply($code);
+//        var_dump($reply);
 
         $this->assertIsObject($gps);
     }
@@ -70,9 +73,10 @@ class ReplyTest extends TestCase {
         $gps->analytical($str);
 
         $reply = $gps->reply(4, 100, 0);
+//        var_dump($reply);
 
         $msg = $gps->getReply();
-//        var_dump($msg, $reply);
+//        var_dump($msg);
 
         $this->assertIsObject($gps);
     }

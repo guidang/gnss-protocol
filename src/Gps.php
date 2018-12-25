@@ -15,7 +15,6 @@ class Gps {
     protected $data = '';
 
     public $hex_msg = ''; //接收数据 - 不包含包头包尾
-    public $hex_reply = ''; //回复数据 - 不包含包头包尾
 
     protected $message; //消息类
     protected $auto = true; //是否分析消息体

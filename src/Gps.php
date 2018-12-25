@@ -19,6 +19,7 @@ class Gps {
     protected $message; //消息类
     protected $auto = true; //是否分析消息体
     protected $reply; //应答类
+    protected $auth_code = ''; //鉴权码(注册成功时返回, 以后每次鉴权时需要)
 
     public function __construct() {
     }
@@ -110,6 +111,12 @@ class Gps {
         }
 
         $reply = $this->reply->reply($code, $type);
+
+        //注册协议
+        if ($this->message->head_msg_id == $this->reply::REGISTER_MSG_ID) {
+            $this->auth_code = $this->reply->auth_code;
+        }
+
         return $reply;
     }
 

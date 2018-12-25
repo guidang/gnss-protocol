@@ -24,8 +24,8 @@ class TerminalTest extends TestCase {
         $gps = new Gps();
         $gps->analytical($str);
 
-        $info = $gps->getInfo();
-        var_dump($info);
+//        $info = $gps->getInfo();
+//        var_dump($info);
 
         $this->assertIsObject($gps);
         return true;
@@ -40,6 +40,23 @@ class TerminalTest extends TestCase {
         $gps = new Gps();
         $gps->setAuto(false);
         $gps->analytical($str);
+
+        $this->assertIsObject($gps);
+        return true;
+    }
+
+    /**
+     * 注册失败
+     * @return bool
+     */
+    public function testRegisterError() {
+        $str = '7e810000060580323437580000009303fb7e';
+        $gps = new Gps();
+        $gps->analytical($str);
+
+        $gps->setReplyId(MessageId::CANCELLATION);
+        $gps->reply(-1);
+        var_dump($gps);
 
         $this->assertIsObject($gps);
         return true;

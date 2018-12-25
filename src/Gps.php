@@ -20,6 +20,7 @@ class Gps {
     protected $message; //消息类
     protected $auto = true; //是否分析消息体
     protected $reply; //应答类
+    protected $reply_id = ''; //自定义应答ID
 
     public function __construct() {
     }
@@ -30,6 +31,14 @@ class Gps {
      */
     public function setAuto(bool $switch) {
         $this->auto  = $switch;
+    }
+
+    /**
+     * 自定义应答ID
+     * @param string $id
+     */
+    public function setReplyId(string $id) : void {
+        $this->reply_id = $id;
     }
 
     protected function receive(string $data) {
@@ -89,14 +98,18 @@ class Gps {
 
     /**
      * 应答消息内容
-     * @param int $code 结果
+     * @param int $code 结果 (-1. 空数据)
      * @param int $number 应答流水号
      * @param int $type 应答类型 (0.应答消息(十六进制字符串), 1.应答消息体, 其它.应答消息(已封装的十六进制数据流))
      * @param array $options 扩展选项 [is_pack,encrypt_type,keep] 是否分包,加密方式,保留位
      * @return string
      */
-    public function reply(int $code = 4, int $number = 0, int $type = 0, array $options = []) : string {
+    public function reply(int $code = 4, int $number = 0, int $type = 2, array $options = []) : string {
         $this->reply = new Reply($this->message->head_msg_id, $this->message->head_msg_number, $this->message->head_msg_mobile);
+
+        if (! empty($this->reply_id)) {
+            $this->reply->reply_id = $this->reply_id;
+        }
 
         if ($number > 0) {
             $this->reply->setNumber($number);
@@ -113,7 +126,7 @@ class Gps {
         $reply = $this->reply->reply($code, $type);
 
         //注册协议
-        if ($this->message->head_msg_id == $this->reply::REGISTER_MSG_ID) {
+        if ($this->message->head_msg_id == MessageId::REGISTER) {
             $this->auth_code = $this->reply->auth_code;
         }
 

@@ -12,9 +12,6 @@ declare(strict_types=1);
 namespace ChinaGnss;
 
 class Reply {
-    const PLATFORM_REPLY_ID = '8001'; //通用应答ID
-    const REGISTER_REPLY_ID = '8100'; //注册应答ID
-    const REGISTER_MSG_ID = '0100'; //注册消息ID
 
     public $msg_id = ''; //消息ID
     public $msg_number = ''; //消息流水号
@@ -40,7 +37,7 @@ class Reply {
         $this->msg_mobile = $head_msg_mobile;
 
         //确定应答ID
-        $this->reply_id = ($this->msg_id == self::REGISTER_MSG_ID) ? self::REGISTER_REPLY_ID : self::PLATFORM_REPLY_ID;
+        $this->reply_id = ($this->msg_id == MessageId::REGISTER) ? MessageId::REGISTER_REPLY : MessageId::PLATFORM_REPLY;
     }
 
     /**
@@ -64,14 +61,17 @@ class Reply {
 
     /**
      * 回复内容
-     * @param int $code 结果
+     * @param int $code 结果 (-1.空数据)
      * @param int $type 应答类型 (0.应答消息(十六进制字符串), 1.应答消息体, 其它.应答消息(已封装的十六进制数据流))
      * @return string
      */
-    public function reply(int $code = 4, int $type = 0) : string {
+    public function reply(int $code = 4, int $type = 2) : string {
         $this->code = $code;
 
-        $this->reply_body = ($this->reply_id == self::REGISTER_REPLY_ID) ? $this->registerReply() : $this->platformReply();
+        if ($code != -1) {
+            $this->reply_body = ($this->reply_id == MessageId::REGISTER_REPLY) ? $this->registerReply() : $this->platformReply();
+        }
+
         if ($type == 1) {
             return $this->reply_body;
         }

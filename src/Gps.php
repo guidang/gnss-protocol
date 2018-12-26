@@ -20,7 +20,6 @@ class Gps {
     protected $message; //消息类
     protected $auto = true; //是否分析消息体
     protected $reply; //应答类
-    protected $reply_id = ''; //自定义应答ID
 
     public function __construct() {
     }
@@ -31,14 +30,6 @@ class Gps {
      */
     public function setAuto(bool $switch) {
         $this->auto  = $switch;
-    }
-
-    /**
-     * 自定义应答ID
-     * @param string $id
-     */
-    public function setReplyId(string $id) : void {
-        $this->reply_id = $id;
     }
 
     protected function receive(string $data) {
@@ -106,10 +97,6 @@ class Gps {
      */
     public function reply(int $code = 4, int $number = 0, int $type = 2, array $options = []) : string {
         $this->reply = new Reply($this->message->head_msg_id, $this->message->head_msg_number, $this->message->head_msg_mobile);
-
-        if (! empty($this->reply_id)) {
-            $this->reply->reply_id = $this->reply_id;
-        }
 
         if ($number > 0) {
             $this->reply->setNumber($number);

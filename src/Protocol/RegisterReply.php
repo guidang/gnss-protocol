@@ -48,7 +48,7 @@ class RegisterReply implements Data {
      */
     public function analyze(): array {
         $msg = [
-            'msg_number' => Format::hex2Dec($this->msg_number),
+            'msg_number' => $this->msg_number,
             'msg_result' => Format::hex2Dec($this->msg_result),
             'auth_code' => $this->auth_code,
         ];

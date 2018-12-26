@@ -20,4 +20,5 @@ class MessageId {
 
     const REGISTER = '0100'; //终端注册
     const CANCELLATION = '0003'; //终端注销
+    const AUTHENTICATION = '0102'; //鉴权
 }

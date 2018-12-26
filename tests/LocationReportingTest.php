@@ -38,11 +38,11 @@ class LocationReportingTest extends TestCase {
     public function testBody() {
         $body = '00000000000c000301581e5206ca60b6004c0000008f18122303545925040000000001040000037530011f310105';
         $location = new LocationReporting($body);
-        var_dump($location);
+//        var_dump($location);
 
         $result = $location->analyze();
 
-        var_dump($result);
+//        var_dump($result);
     }
 
 }

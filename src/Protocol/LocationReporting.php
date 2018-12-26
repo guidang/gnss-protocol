@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace ChinaGnss\Protocol;
 
 use ChinaGnss\Format;
+use ChinaGnss\Protocol\LocationReporting\Extend;
 use ChinaGnss\Structure\Data;
 
 class LocationReporting implements Data {
@@ -25,10 +26,10 @@ class LocationReporting implements Data {
     public $speed; //速度
     public $direction; //方向
     public $time; //时间
+    public $extend = ''; //扩展信息
 
-    public $ext_msg_id; //附加信息ID
-    public $ext_msg_length; //附加信息长度
-    public $ext_msg_data; //附加信息内容
+    public $extend_arr = []; //扩展信息数组(已拆分)
+    protected $ext; //扩展类
 
     /**
      * 初始化
@@ -55,10 +56,18 @@ class LocationReporting implements Data {
         $this->speed = Format::subByte($this->data, 18, 2);
         $this->direction = Format::subByte($this->data, 20, 2);
         $this->time = Format::subByte($this->data, 22, 6);
+        $this->extend = Format::subByte($this->data, 28);
 
-        $this->ext_msg_id = Format::subByte($this->data, 28, 1);
-        $this->ext_msg_length = Format::subByte($this->data, 29, 1);
-        $this->ext_msg_data = Format::subByte($this->data, 30);
+        //切割扩展数据
+        $this->splitExtend();
+    }
+
+    /**
+     * 解析扩展数据
+     */
+    public function splitExtend() : void {
+        $this->ext = new Extend($this->extend);
+        $this->extend_arr = $this->ext->info;
     }
 
     /**
@@ -66,11 +75,9 @@ class LocationReporting implements Data {
      * @return mixed
      */
     public function analyze(): array {
-        // TODO: Implement analyze() method.
-
         $alarm_signs = $this->analyzeAlarm(); //报警
         $status = $this->analyzeStatus(); //状态
-        $extend = $this->analyzeExtend(); //扩展
+        $extend = $this->ext->analyze(); //扩展信息
 
         $msg = [
             'alarm_signs' => $alarm_signs,
@@ -174,6 +181,7 @@ class LocationReporting implements Data {
 
 //        $msg = array_combine($gov_key, $signs_arr);
         $msg = $signs_arr;
+        $msg = [];
 
         return $msg;
     }
@@ -227,46 +235,7 @@ class LocationReporting implements Data {
         */
 //        $msg = array_combine($gov_key, $status_arr);
         $msg = $status_arr;
-
-        return $msg;
-    }
-
-    /**
-     * 解析扩展数据
-     * @return array
-     */
-    public function analyzeExtend() : array {
-        $msg = [
-            'id' => $this->ext_msg_id, //Format::hex2Dec($this->ext_msg_id), //附加信息ID(十进制)
-            'length' => Format::hex2Dec($this->ext_msg_length), //附加信息长度(十进制)
-            'info' => $this->analyzeExtInfo(),
-        ];
-
-        return $msg;
-    }
-
-    /**
-     * 扩展信息解析
-     * @return array
-     */
-    protected function analyzeExtInfo() : array {
         $msg = [];
-
-        /*
-        switch (strtolower($this->ext_msg_id)) {
-            //扩展车辆信号状态位
-            case '25':
-                for ($i = 31; $i >= 0; $i--) {
-                    $key = 31 - $i;
-                    $value = $this->ext_msg_data[$i];
-                    echo ("\nbit: {$key}, value: {$value}, index: {$i}");
-                }
-                break;
-
-            case '2a':
-                break;
-        }
-        */
 
         return $msg;
     }

@@ -21,4 +21,7 @@ class MessageId {
     const REGISTER = '0100'; //终端注册
     const CANCELLATION = '0003'; //终端注销
     const AUTHENTICATION = '0102'; //鉴权
+
+    CONST LOCATION_REPORTING = '0200'; //位置信息汇报
+    CONST LOCATING_DATA = '0704'; //定位数据批量上传
 }

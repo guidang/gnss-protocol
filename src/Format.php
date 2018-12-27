@@ -35,6 +35,26 @@ class Format {
     }
 
     /**
+     * 筛选数据 - 去头云尾
+     * @param string $data 字符串
+     * @param string $pre_str 去除首字符串
+     * @param string $suf_str 去除尾字符串
+     * @return string
+     */
+    public static function filterData(string $data, string $pre_str = '7e', string $suf_str = '7e') : string {
+        $data = strtolower($data);
+
+        $pre_len = self::byteLen($pre_str);
+        $suf_len = self::byteLen($suf_str);
+
+        $prefix = Format::subByte($data, 0, $pre_len);
+        $suffix = Format::subByte($data, self::byteLen($data) - $pre_len, $suf_len);
+
+        $hex_msg = (($prefix == $pre_str) && ($suffix == $suf_str)) ? mb_substr($data, $pre_len * 2, mb_strlen($data) - ($pre_len + $suf_len) * 2) : $data;
+        return $hex_msg;
+    }
+
+    /**
      * 消息转义
      * @param $str
      * @return mixed
@@ -285,16 +305,34 @@ class Format {
      */
     public static function hex2Str(string $hex, string $to_encoding = 'gbk') : string {
         $string = '';
+        for ($i = 0; $i < strlen($hex) - 1; $i += 2) {
+            $string .= chr(hexdec($hex[$i] . $hex[$i + 1]));
+        }
 
-        if (strtolower($to_encoding) == 'gbk') {
-            for ($i = 0; $i < strlen($hex) - 1; $i += 2) {
-                $string .= chr(hexdec($hex[$i] . $hex[$i + 1]));
-            }
+        $to_encoding = strtolower($to_encoding);
 
-            $string = mb_convert_encoding($string, 'UTF-8', 'GBK');
+        ($to_encoding == 'gbk') && ($string = mb_convert_encoding($string, 'UTF-8', 'GBK'));
 
-        } else {
+        return $string;
+    }
 
+    /**
+     * 中文转十六进制
+     * @param string $str
+     * @param string $to_encoding 转编码(默认UTF-8)
+     * @param string $from_encoding 从编码(默认UTF-8)
+     * @return string
+     */
+    public static function str2Hex(string $str, string $to_encoding = 'utf-8', string $from_encoding = 'utf-8') : string {
+        $string = '';
+
+        $to_encoding = strtolower($to_encoding);
+        $from_encoding = strtolower($from_encoding);
+
+        ($to_encoding == $from_encoding) || ($str = mb_convert_encoding($str, $to_encoding, $from_encoding));
+
+        for ($i = 0; $i < strlen($str); $i++) {
+            $string .= dechex(ord($str[$i]));
         }
 
         return $string;

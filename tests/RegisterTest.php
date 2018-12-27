@@ -13,7 +13,7 @@ namespace ChinaGnss;
 
 use PHPUnit\Framework\TestCase;
 
-class ReplyTest extends TestCase {
+class RegisterTest extends TestCase {
 
     /**
      * 测试注册成功
@@ -41,6 +41,26 @@ class ReplyTest extends TestCase {
 
         $gps = new Gps();
         $gps->analytical($str);
+
+        $reply = $gps->reply();
+        $data = $gps->getReply();
+
+        echo "\nreply_body: {$data->reply_body}";
+
+        $this->assertNotNull($reply);
+    }
+
+    /**
+     * 注册失败
+     */
+    public function testRegisterError() {
+        //设备不存在
+        $str = '7e01000058015697794619000000000000594300000059432d31310000000000000000000000000000000005803234375802d4c141313233342c7e';
+
+        $gps = new Gps();
+        $gps->analytical($str);
+
+//        var_dump($gps);
 
         $reply = $gps->reply();
         $data = $gps->getReply();

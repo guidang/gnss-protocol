@@ -25,22 +25,21 @@ class Gps {
     }
 
     /**
-     * 是否
+     * 是否解析为默认协议消息体
      * @param bool $switch
      */
-    public function setAuto(bool $switch) {
+    public function setAuto(bool $switch) : void {
         $this->auto  = $switch;
     }
 
-    protected function receive(string $data) {
+    /**
+     * 接收消息
+     * @param string $data
+     */
+    protected function receive(string $data) : void {
         $this->data = $data;
 
-        $data = strtolower($data);
-        $prefix = Format::subByte($data, 0, 1);
-        $suffix = Format::subByte($data, Format::byteLen($data) - 1, 1);
-
-//        var_dump($data, $prefix, $suffix);
-        $hex_msg = (($prefix == '7e') && ($suffix == '7e')) ? mb_substr($data, 2, mb_strlen($data) - 4) : $data;
+        $hex_msg = Format::filterData($data);
 
         $this->hex_msg = Format::strUnescape($hex_msg);
     }

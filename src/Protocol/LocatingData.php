@@ -37,7 +37,6 @@ class LocatingData implements Data {
      * @return mixed
      */
     public function split(): void {
-        // TODO: Implement split() method.
         $this->count = Format::subByte($this->data, 0, 2);
         $this->type = Format::subByte($this->data, 2, 1);
         $this->items = Format::subByte($this->data, 3);
@@ -48,7 +47,6 @@ class LocatingData implements Data {
      * @return mixed
      */
     public function analyze(): array {
-        // TODO: Implement analyze() method.
         $msg_len = Format::subByte($this->items, 0, 2); //位置汇报数据体长度
         $msg_info = Format::subByte($this->items, 2); //位置汇报数据体
 

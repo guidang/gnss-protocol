@@ -29,7 +29,7 @@ class PlatformReply implements Data {
     public function __construct(string $data) {
         $this->data = $data;
 
-        var_dump($this->data);
+//        var_dump($this->data);
 
         $this->split();
     }

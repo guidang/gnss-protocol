@@ -16,6 +16,46 @@ use PHPUnit\Framework\TestCase;
 class TerminalTest extends TestCase {
 
     /**
+     * 构造注册信息
+     */
+    public function testResgisterMsg() {
+        $msg = new Terminal();
+
+        $setting = [
+            'msg_id' => MessageId::REGISTER,
+            'msg_number' => '0000',
+            'msg_mobile' => '015697794619',
+        ];
+
+        $msg->setting($setting);
+
+        $plate_number = '粤A12345';
+
+        $register_params = [
+            'province_id' => '0000',
+            'city_id' => '0000',
+            'manufacturer_id' => '5943000000',
+            'terminal_model' => '59432d3131000000000000000000000000000000',
+            'terminal_id' => '00058032343758',
+            'plate_color' => '02',
+            'plate_number' => Format::str2Hex($plate_number, 'gbk'),
+        ];
+
+        $msg->register($register_params);
+
+        $send_data_str = $msg->compile(0);
+//        var_dump($send_data_str);
+
+        $this->assertTrue(true);
+    }
+
+    public function testRegisterParam() {
+        $str = '7e0100005a015697794619000000000000594300000059432d31310000000000000000000000000000000005803234375802d4c14131323334351b7e';
+        $msg = new Terminal($str);
+//        var_dump($msg);
+    }
+
+    /**
      * 注册应答
      * @return bool
      */

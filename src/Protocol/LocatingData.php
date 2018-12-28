@@ -47,21 +47,32 @@ class LocatingData implements Data {
      * @return mixed
      */
     public function analyze(): array {
-        $msg_len = Format::subByte($this->items, 0, 2); //位置汇报数据体长度
-        $msg_info = Format::subByte($this->items, 2); //位置汇报数据体
+        $count = Format::hex2Dec($this->count);
 
-        $reporting = new LocationReporting($msg_info);
-        $location = $reporting->analyze();
+        $items = [];
+
+        $start = 0;
+        for ($i = 0; $i < $count; $i++) {
+            $length_hex = Format::subByte($this->items, $start, 2); //位置汇报数据体长度
+            $length = (int)Format::hex2Dec($length_hex);
+            $msg_info = Format::subByte($this->items, $start + 2, $length); //位置汇报数据体
+
+            $start = $start + 2 + $length;
+
+            $reporting = new LocationReporting($msg_info);
+            $location = $reporting->analyze();
+
+            $items[] = [
+                'length' => $length,
+                'info' => $location,
+            ];
+        }
 
         $msg = [
-            'count' => Format::hex2Dec($this->count),
+            'count' => $count,
             'type' => Format::hex2Dec($this->type),
-            'items' => [
-                'length' => Format::hex2Dec($msg_len),
-                'location' => $location,
-            ]
+            'items' => $items,
         ];
-//        var_dump($this);
         return $msg;
     }
 }

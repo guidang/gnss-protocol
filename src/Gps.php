@@ -126,36 +126,4 @@ class Gps {
     public function getReply() : Reply {
         return $this->reply;
     }
-
-    /**
-     * 客户端 - 应答消息内容
-     * @param string $reply_id 消息ID
-     * @param string $message 消息内容
-     * @param int $number 应答流水号
-     * @param int $type 应答类型 (0.应答消息(十六进制字符串), 1.应答消息体, 其它.应答消息(已封装的十六进制数据流))
-     * @param array $options 扩展选项 [is_pack,encrypt_type,keep] 是否分包,加密方式,保留位
-     * @return string
-     */
-    public function create(string $reply_id, string $message = '', int $number = 0, int $type = 2, array $options = []) : string {
-        $this->reply = new Reply($this->message->head_msg_id, $this->message->head_msg_number, $this->message->head_msg_mobile);
-
-        $this->reply->reply_id = $reply_id;
-        $this->reply->reply_body = $message;
-
-        if ($number > 0) {
-            $this->reply->setNumber($number);
-        }
-
-        if (! empty($options)) {
-            $is_pack = isset($options['is_pack']) ? (bool)$options['is_pack'] : false;
-            $encrypt_type = (! empty($options['encrypt_type']) && (mb_strlen($options['encrypt_type']) == 3)) ? $options['encrypt_type'] : '000';
-            $keep = (! empty($options['keep']) && (mb_strlen($options['keep']) == 2)) ? $options['keep'] : '00';
-
-            $this->reply->setParams($is_pack, $encrypt_type, $keep);
-        }
-
-        $reply = $this->reply->reply(-1, $type);
-
-        return $reply;
-    }
 }

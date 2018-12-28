@@ -96,9 +96,10 @@ class BodyTest extends TestCase {
 
         $gps = new Gps();
 
+//        var_dump($str);
         $gps->analytical($str);
 
-//        $msg = $gps->getMessage();
+        $msg = $gps->getMessage();
 //        var_dump($msg);
         $info = $gps->getInfo();
 //        var_dump($info);

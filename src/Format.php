@@ -35,7 +35,7 @@ class Format {
     }
 
     /**
-     * 筛选数据 - 去头云尾
+     * 筛选数据 - 去头去尾
      * @param string $data 字符串
      * @param string $pre_str 去除首字符串
      * @param string $suf_str 去除尾字符串
@@ -52,6 +52,38 @@ class Format {
 
         $hex_msg = (($prefix == $pre_str) && ($suffix == $suf_str)) ? mb_substr($data, $pre_len * 2, mb_strlen($data) - ($pre_len + $suf_len) * 2) : $data;
         return $hex_msg;
+    }
+
+    /**
+     * 处理粘包
+     * @param string $data 字符串
+     * @param string $pre_str 去除首字符串
+     * @param string $suf_str 去除尾字符串
+     * @param bool $clear 是否清除头和尾, 否则补回包头包尾
+     * @return array
+     */
+    public static function splitMessage(string $data, string $pre_str = '7e', string $suf_str = '7e', bool $clear = true) : array {
+        $pre_len = self::byteLen($pre_str);
+        $suf_len = self::byteLen($suf_str);
+
+        //去头
+        $prefix = Format::subByte($data, 0, $pre_len);
+        ($prefix == $pre_str) && $data = mb_substr($data, $pre_len * 2);
+
+        //去尾
+        $suffix = Format::subByte($data, self::byteLen($data) - $pre_len, $suf_len);
+        ($suffix == $suf_str) && $data = mb_substr($data, 0, mb_strlen($data) - $pre_len * 2);
+
+        $list = explode($pre_str . $suf_str, $data);
+        if ($clear) {
+            return $list;
+        }
+
+        $new_list = [];
+        foreach ($list as $l) {
+            $new_list[] = $pre_str . $l . $suf_str;
+        }
+        return $new_list;
     }
 
     /**

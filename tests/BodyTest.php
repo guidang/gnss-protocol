@@ -105,4 +105,19 @@ class BodyTest extends TestCase {
 
         $this->assertIsObject($gps);
     }
+
+    public function testSplitMessage() {
+        $msg = [
+            'register' => '7e0100002d058032343758009300000000594300000059432d31310000000000000000000000000000000005803234375802d4c1423838383838ff7e',
+            'authentication' => '7e0102000205803234375800007b7d02e87e',
+            'locationreporting' => '7e0200002e058032343758004e00000000000c0001000000000000000000000000000018121310340125040000000001040000000030011b310100817e',
+            'locatingdata' => '7e07040033058032343758004d000101002e00000000000c0001000000000000000000000000000018121308573725040000000001040000000030011f310100f97e',
+            'heartbeat' => '7e000200000580323437580079977e',
+        ];
+
+        $linkpackage = implode('', $msg);
+        $arr = Format::splitMessage($linkpackage, '7e', '7e');
+//        var_dump($arr);
+        $this->assertIsArray($arr);
+    }
 }

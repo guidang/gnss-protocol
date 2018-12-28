@@ -63,16 +63,16 @@ class Format {
      * @return array
      */
     public static function splitMessage(string $data, string $pre_str = '7e', string $suf_str = '7e', bool $clear = true) : array {
-        $pre_len = self::byteLen($pre_str);
-        $suf_len = self::byteLen($suf_str);
+        $pre_len = mb_strlen($pre_str);
+        $suf_len = mb_strlen($suf_str);
 
         //去头
-        $prefix = Format::subByte($data, 0, $pre_len);
-        ($prefix == $pre_str) && $data = mb_substr($data, $pre_len * 2);
+        $prefix = mb_substr($data, 0, $pre_len);
+        ($prefix == $pre_str) && $data = mb_substr($data, $pre_len);
 
         //去尾
-        $suffix = Format::subByte($data, self::byteLen($data) - $pre_len, $suf_len);
-        ($suffix == $suf_str) && $data = mb_substr($data, 0, mb_strlen($data) - $pre_len * 2);
+        $suffix = mb_substr($data, -2, $suf_len);
+        ($suffix == $suf_str) && $data = mb_substr($data, 0, mb_strlen($data) - $suf_len);
 
         $list = explode($pre_str . $suf_str, $data);
         if ($clear) {

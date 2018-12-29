@@ -21,6 +21,8 @@ class LocatingData implements Data {
     public $type; //位置数据类型, 0:正常位置批量汇报，1:盲区补报
     public $items; //位置汇报数据项
 
+    public $item_list = []; //位置列表
+
     /**
      * 初始化
      * Data constructor.
@@ -56,6 +58,8 @@ class LocatingData implements Data {
             $length_hex = Format::subByte($this->items, $start, 2); //位置汇报数据体长度
             $length = (int)Format::hex2Dec($length_hex);
             $msg_info = Format::subByte($this->items, $start + 2, $length); //位置汇报数据体
+
+            $this->item_list[] = $msg_info;
 
             $start = $start + 2 + $length;
 

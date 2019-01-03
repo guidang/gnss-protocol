@@ -68,11 +68,20 @@ class Format {
 
         //去头
         $prefix = mb_substr($data, 0, $pre_len);
-        ($prefix == $pre_str) && $data = mb_substr($data, $pre_len);
+        $has_pre = ($prefix == $pre_str);
+
+        $fix_pre_start = 0;
+        if ($has_pre) {
+            $data = mb_substr($data, $pre_len);
+            $fix_pre_start = 0 - $pre_len;
+        }
 
         //去尾
-        $suffix = mb_substr($data, -2, $suf_len);
-        ($suffix == $suf_str) && $data = mb_substr($data, 0, mb_strlen($data) - $suf_len);
+        $suffix = mb_substr($data, $fix_pre_start, $suf_len);
+        $has_suf = ($suffix == $suf_str);
+        if ($has_suf) {
+            $data = mb_substr($data, 0, mb_strlen($data) - $suf_len);
+        }
 
         $list = explode($pre_str . $suf_str, $data);
         if ($clear) {

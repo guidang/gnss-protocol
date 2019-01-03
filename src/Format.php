@@ -70,14 +70,13 @@ class Format {
         $prefix = mb_substr($data, 0, $pre_len);
         $has_pre = ($prefix == $pre_str);
 
-        $fix_pre_start = 0;
         if ($has_pre) {
             $data = mb_substr($data, $pre_len);
-            $fix_pre_start = 0 - $pre_len;
         }
 
         //去尾
-        $suffix = mb_substr($data, $fix_pre_start, $suf_len);
+        $fix_suf_start = 0 - mb_strlen($suf_str);
+        $suffix = mb_substr($data, $fix_suf_start, $suf_len);
         $has_suf = ($suffix == $suf_str);
         if ($has_suf) {
             $data = mb_substr($data, 0, mb_strlen($data) - $suf_len);

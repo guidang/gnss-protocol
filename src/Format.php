@@ -432,4 +432,28 @@ class Format {
         $arr = str_split($reverse_str, 1);
         return $arr;
     }
+
+    /**
+     * 无符号四字节整型
+     * @param string $byte0
+     * @param string $byte1
+     * @param string $byte2
+     * @param string $byte3
+     * @return int
+     */
+    public static function dword(string $byte0, string $byte1, string $byte2, string $byte3) : int {
+        $result = (($byte3 & 0xFF) << 24) | (($byte2 & 0xFF) << 16) | (($byte1 & 0xFF) << 8) | ($byte0 & 0xFF);
+        return $result;
+    }
+
+    /**
+     * 无符号双字节整型
+     * @param string $byte0
+     * @param string $byte1
+     * @return int
+     */
+    public static function word(string $byte0, string $byte1) : int {
+        $result = (($byte1 & 0xFF) << 8) | ($byte0 & 0xFF);
+        return $result;
+    }
 }

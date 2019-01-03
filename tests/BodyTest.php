@@ -138,8 +138,14 @@ class BodyTest extends TestCase {
         ];
 
         $linkpackage = implode('', $msg);
-//        $arr = Format::splitMessage($linkpackage, chr(0x7e), chr(0x7e));
-//        var_dump($arr);
+        $linkpackage = '7e0100002d058032343758009300000000594300000059432d31310000000000000000000000000000000005803234375802d4c1423838383838ff7e7e0102000205803234375800007b7d02e87e';
+//        $linkpackage_package = Format::packData($linkpackage);
+//        $hex_data_arr = Format::splitMessage($linkpackage_package, chr(0x7e), chr(0x7e));
+//        foreach ($hex_data_arr as $key => $value) {
+//            $arr = Format::unpackData($value);
+//            var_dump($arr, $value);
+//            echo "\n\n";
+//        }
 //        $this->assertIsArray($arr);
     }
 }

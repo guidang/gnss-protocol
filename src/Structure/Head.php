@@ -49,7 +49,7 @@ class Head implements Data {
      */
     public function analyze() : array {
         $msg_items = [];
-        if (mb_strlen($this->msg_items) > 0) {
+        if (strlen($this->msg_items) > 0) {
             $msg_items['count'] = Format::hex2Dec(Format::subByte($this->msg_items, 0, 2)); //包总数
             $msg_items['num'] = Format::hex2Dec(Format::subByte($this->msg_items, 2, 2)); //包序号
         }

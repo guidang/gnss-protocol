@@ -103,8 +103,8 @@ class Gps {
 
         if (! empty($options)) {
             $is_pack = isset($options['is_pack']) ? (bool)$options['is_pack'] : false;
-            $encrypt_type = (! empty($options['encrypt_type']) && (mb_strlen($options['encrypt_type']) == 3)) ? $options['encrypt_type'] : '000';
-            $keep = (! empty($options['keep']) && (mb_strlen($options['keep']) == 2)) ? $options['keep'] : '00';
+            $encrypt_type = (! empty($options['encrypt_type']) && (strlen($options['encrypt_type']) == 3)) ? $options['encrypt_type'] : '000';
+            $keep = (! empty($options['keep']) && (strlen($options['keep']) == 2)) ? $options['keep'] : '00';
 
             $this->reply->setParams($is_pack, $encrypt_type, $keep);
         }

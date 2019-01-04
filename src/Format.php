@@ -50,7 +50,7 @@ class Format {
         $prefix = Format::subByte($data, 0, $pre_len);
         $suffix = Format::subByte($data, self::byteLen($data) - $pre_len, $suf_len);
 
-        $hex_msg = (($prefix == $pre_str) && ($suffix == $suf_str)) ? mb_substr($data, $pre_len * 2, mb_strlen($data) - ($pre_len + $suf_len) * 2) : $data;
+        $hex_msg = (($prefix == $pre_str) && ($suffix == $suf_str)) ? mb_substr($data, $pre_len * 2, strlen($data) - ($pre_len + $suf_len) * 2) : $data;
         return $hex_msg;
     }
 
@@ -155,7 +155,7 @@ class Format {
      * @return string
      */
     public static function fillBin2Hex(string $str) : string {
-        $fill_len = (mb_strlen($str) / 8) * 2; //字节长度 * 2 = 字符串长度
+        $fill_len = (strlen($str) / 8) * 2; //字节长度 * 2 = 字符串长度
         $str_hex = self::bin2Hex($str);
         return self::fillLeft($str_hex, $fill_len);
     }
@@ -246,7 +246,7 @@ class Format {
      * @return string|null
      */
     public static function substrReverse(string $str, int $start = 0, int $length = 1) : ?string {
-        $len = mb_strlen($str);
+        $len = strlen($str);
 
         if (($length <= 0) || ($start < 0)) {
             return null;
@@ -273,11 +273,11 @@ class Format {
      * @return array
      */
     public static function strCut2Arr(string $str, int $filter_len = 1, $fill_str = '', $mix_len = 0) : array {
-        $len = mb_strlen($str);
+        $len = strlen($str);
         $pre_len = $len % $filter_len;
 
         //如果存在填充字符,先填充再切割
-        if (mb_strlen($fill_str) > 0) {
+        if (strlen($fill_str) > 0) {
             $new_len = 0;
             //无最大长度,则按分割长度进行补位
             if ($mix_len == 0) {

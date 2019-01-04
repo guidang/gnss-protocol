@@ -65,7 +65,7 @@ class Terminal {
         $this->keep = $keep;
 
         //长度为3
-        (mb_strlen($encrypt_type) === 3) && $this->encrypt_type = $encrypt_type;
+        (strlen($encrypt_type) === 3) && $this->encrypt_type = $encrypt_type;
     }
 
     /**
@@ -125,7 +125,7 @@ class Terminal {
      * @param string $body
      */
     public function setBody(string $msg_id = '', string $body = '') {
-        if (! empty($msg_id) && mb_strlen($msg_id) == 4) {
+        if (! empty($msg_id) && strlen($msg_id) == 4) {
             $this->msg_id = $msg_id;
         }
         $this->body = $body;

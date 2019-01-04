@@ -142,7 +142,7 @@ class Terminal {
         }
 
         //消息体长度(二进制)
-        $length_bin = Format::dec2Bin(mb_strlen($this->body));
+        $length_bin = Format::dec2Bin(Format::byteLen($this->body));
         //消息属性(二进制字符串)
         $property_bin = sprintf('%s%d%s%s', $this->keep, $this->is_pack, $this->encrypt_type, Format::fillLeft($length_bin, 10));
         $property = Format::fillBin2Hex($property_bin);

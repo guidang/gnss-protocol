@@ -135,7 +135,7 @@ class Format {
      * @return int
      */
     public static function byteLen(string $str, bool $force = false) : int {
-        $strlen = mb_strlen($str);
+        $strlen = strlen($str);
         $bytelen = $strlen / 2;
 
         if (! $force) {

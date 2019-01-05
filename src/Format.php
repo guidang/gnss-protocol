@@ -75,10 +75,10 @@ class Format {
 
         //去尾
         $data_len = strlen($data);
-        $suffix = substr($data, $data_len - 1);
+        $suffix = substr($data, $data_len - $suf_len);
         $has_suf = ($suffix == $suf_str);
         if ($has_suf) {
-            $data = substr($data, 0, strlen($data) - $suf_len);
+            $data = substr($data, 0, $data_len - $suf_len);
         }
 
         $list = explode($pre_str . $suf_str, $data);
